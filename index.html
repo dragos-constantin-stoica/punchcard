@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Punch card</title>
+    <link rel="stylesheet" style="text/css" href="deps/opt/bootstrap.css" />
+    <script type="text/javascript" src="deps/jquery.min.js"></script>
+    <script type="text/javascript" src="deps/underscore.js"></script>
+    <script type="text/javascript" src="deps/opt/jsv.js"></script>
+    <script type="text/javascript" src="lib/jsonform.js"></script>
+
+</head>
+
+<body>
+    <h1>Input your checkin and checkout time</h1>
+    <form></form>
+    <div id="res" class="alert"></div>
+
+    <script type="text/javascript">
+        function addZero(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+
+
+
+        $('form').jsonForm({
+            "schema": {
+                "punchcard": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "title": "Punch Time",
+                        "properties": {
+                            "checkin": {
+                                "type": "string",
+                                "title": "IN",
+                                "required": true
+                            },
+                            "checkout": {
+                                "type": "true",
+                                "title": "OUT",
+                                "required": true
+                            }
+                        }
+                    }
+                }
+            },
+            "form": [{
+                    "type": "array",
+                    "items": {
+                        "type": "section",
+                        "items": [{
+                                "key": "punchcard[].checkin",
+                                "type": "time"
+                            },
+                            {
+                                "key": "punchcard[].checkout",
+                                "type": "time"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "submit",
+                    "title": "Punch your card in the face!"
+                }
+
+            ],
+            onSubmit: function (errors, values) {
+                if (errors) {
+                    $('#res').html('<p>I beg your pardon?</p>');
+                } else {
+                    var hhmm = [0, 0];
+                    values.punchcard.reduce((acc, crt) => {
+
+                        var hh, mm;
+                        if (parseInt(crt.checkout.split(":")[1]) >= parseInt(crt.checkin.split(":")[
+                                1])) {
+                            hh = parseInt(crt.checkout.split(":")[0]) - parseInt(crt.checkin.split(
+                                ":")[0]);
+                            mm = parseInt(crt.checkout.split(":")[1]) - parseInt(crt.checkin.split(
+                                ":")[1]);
+                        } else {
+                            hh = parseInt(crt.checkout.split(":")[0]) - parseInt(crt.checkin.split(
+                                ":")[0]) - 1;
+                            mm = 60 + parseInt(crt.checkout.split(":")[1]) - parseInt(crt.checkin
+                                .split(":")[1]);
+                        };
+
+                        acc[0] += hh;
+                        acc[1] += mm;
+                        return acc;
+                    }, hhmm);
+
+                    //check for correct time series,
+                    //it should be in chronological order
+                    if (hhmm[0] < 0 || hhmm[1] < 0) {
+                        $('#res').html('<p><em>Back to the future reloaded?</em></p>');
+                    } else {
+                        $('#res').html('<h2>Punched time: ' + addZero(hhmm[0]) + "h" + addZero(hhmm[1]) +
+                            '</h2>');
+                    }
+
+
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
