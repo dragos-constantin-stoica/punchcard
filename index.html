@@ -77,22 +77,19 @@
                     var hhmm = [0, 0];
                     values.punchcard.reduce((acc, crt) => {
 
-                        var hh, mm;
-                        if (parseInt(crt.checkout.split(":")[1]) >= parseInt(crt.checkin.split(":")[
-                                1])) {
-                            hh = parseInt(crt.checkout.split(":")[0]) - parseInt(crt.checkin.split(
-                                ":")[0]);
-                            mm = parseInt(crt.checkout.split(":")[1]) - parseInt(crt.checkin.split(
-                                ":")[1]);
+                        var hh, mm, 
+                        hhout = parseInt(crt.checkout.split(":")[0]), hhin = parseInt(crt.checkin.split(":")[0]),
+                        mmout = parseInt(crt.checkout.split(":")[1]), mmin = parseInt(crt.checkin.split(":")[1]);
+                        if (mmout >= mmin) {
+                            hh = hhout - hhin;
+                            mm =  mmout - mmin;
                         } else {
-                            hh = parseInt(crt.checkout.split(":")[0]) - parseInt(crt.checkin.split(
-                                ":")[0]) - 1;
-                            mm = 60 + parseInt(crt.checkout.split(":")[1]) - parseInt(crt.checkin
-                                .split(":")[1]);
+                            hh = hhout - hhin - 1;
+                            mm = 60 + mmout - mmin;
                         };
 
-                        acc[0] += hh;
-                        acc[1] += mm;
+                        acc[0] = acc[0] + hh + Math.floor((acc[1]+mm)/60);
+                        acc[1] = (acc[1] + mm) % 60;
                         return acc;
                     }, hhmm);
 
