@@ -97,8 +97,8 @@
                     }, hhmm);
                     
                     //compute 8:30 of continuous work since the 1st punchin
-                    var gtfomm = (parseInt(values.punchcard[0].split(":")[1]) + 30)%60;
-                    var gtfohh = parseInt(values.punchcard[0].split(":")[0]) + 8 + Math.floor((arseInt(values.puchcard[0].split(":")[1]) + 30)/60);
+                    var gtfomm = (parseInt(values.punchcard[0].checkin.split(":")[1]) + 30)%60;
+                    var gtfohh = parseInt(values.punchcard[0].checkin.split(":")[0]) + 8 + Math.floor((arseInt(values.puchcard[0].checkin.split(":")[1]) + 30)/60);
 
 
                     //check for correct time series,
