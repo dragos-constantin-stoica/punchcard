@@ -98,7 +98,7 @@
                     
                     //compute 8:30 of continuous work since the 1st punchin
                     var gtfomm = (parseInt(values.puchcard[0].split(":")[1]) + 30)%60;
-                    var gtfohh = arseInt(values.puchcard[0].split(":")[0]) + 8 + Math.floor((arseInt(values.puchcard[0].split(":")[1]) + 30)/60);
+                    var gtfohh = parseInt(values.puchcard[0].split(":")[0]) + 8 + Math.floor((arseInt(values.puchcard[0].split(":")[1]) + 30)/60);
 
 
                     //check for correct time series,
