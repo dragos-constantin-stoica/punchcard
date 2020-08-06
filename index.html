@@ -95,6 +95,11 @@
                         acc[1] = (acc[1] + mm) % 60;
                         return acc;
                     }, hhmm);
+                    
+                    //compute 8:30 of continuous work since the 1st punchin
+                    var gtfomm = (parseInt(values.puchcard[0].split(":")[1]) + 30)%60;
+                    var gtfohh = arseInt(values.puchcard[0].split(":")[0]) + 8 + Math.floor((arseInt(values.puchcard[0].split(":")[1]) + 30)/60);
+
 
                     //check for correct time series,
                     //it should be in chronological order
@@ -102,7 +107,7 @@
                         $('#res').html('<p><em>Back to the future reloaded?</em></p>');
                     } else {
                         $('#res').html('<h2>Punched time: ' + addZero(hhmm[0]) + "h" + addZero(hhmm[1]) +
-                            '</h2>');
+                                       '<br/>Hit the road Jack at: ' + addZero(gtfohh) + ':' + addZero(gtfomm) + '</h2>');
                     }
 
 
